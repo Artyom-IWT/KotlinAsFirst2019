@@ -21,8 +21,7 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    if ( ( number / 1000 + number % 1000 / 100 ) == ( number % 10 + number % 100 / 10 ) ) return true
-    else return false
+    return ((number / 1000 + number % 1000 / 100) == (number % 10 + number % 100 / 10))
 }
 /**
  * Простая
@@ -32,8 +31,7 @@ fun isNumberHappy(number: Int): Boolean {
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    if ( ( x1 == x2 ) || ( y1 == y2 ) || ( abs( x1 - x2 ) == abs( y1 - y2 ) ) ) return true
-    else return false
+    return ((x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2)))
 }
 
 
@@ -44,9 +42,9 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int = when {
-    ( ( month == 4 ) || ( month == 6 ) || ( month == 9 ) || ( month == 11 ) ) -> 30
-    ( ( ( month == 2 ) && ( year % 4 != 0 ) ) || ( ( year % 100 == 0 ) && ( year % 400 != 0 ) ) ) -> 28
-    ( ( month == 2 ) && ( ( year % 4 == 0) || ( year % 400 == 0 ) ) ) -> 29
+    ((month == 4) || (month == 6) || (month == 9) || (month == 11)) -> 30
+    (((month == 2) && (year % 4 != 0)) || ((year % 100 == 0) && (year % 400 != 0))) -> 28
+    ((month == 2) && ((year % 4 == 0) || (year % 400 == 0))) -> 29
     else -> 31
 }
 
@@ -61,9 +59,9 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean = when {
-        ( ( x1 == x2 ) && ( ( r2 - r1 ) >= abs(y1 - y2) ) ) -> true
-        ( ( y1 == y2 ) && ( ( r2 - r1 ) >= abs(x1 - x2) ) ) -> true
-        ( ( x1 != x2 ) && ( y1 != y2 ) && ( ( r2 - r1 ) >= sqrt( ( sqr( ( x2 - x1 ) ) + sqr( ( y2 - y1 ) ) ) ) ) ) -> true
+        ((x1 == x2) && ((r2 - r1) >= abs(y1 - y2))) -> true
+        ((y1 == y2) && ((r2 - r1) >= abs(x1 - x2))) -> true
+        ((x1 != x2) && (y1 != y2) && ((r2 - r1) >= sqrt((sqr((x2 - x1)) + sqr((y2 - y1)))))) -> true
         else -> false
     }
 
@@ -77,11 +75,7 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val Sab = a * b
-    val Sac = a * c
-    val Sbc = b * c
-    val Srs = r * s
-    if ( ( Sab <= Srs ) || ( Sac <= Srs ) || ( Sbc <= Srs ) ) return true
-    else return false
-
+   return (((r >= a) && ((s >= b) || (s >= c))) || ((r >= b) && ((s >= a) || (s >= c))) || ((r >= c) && ((s >= a) ||
+           (s >= b))))
+    // исправил решение, т.к. через площади программа будет работать неверно, пример : кирпич 4х4х4 и отверстие 30х1
 }
