@@ -80,7 +80,7 @@ fun digitNumber(n: Int): Int {
     do {
         count++
         num /= 10
-    } while ( num > 0 )
+    } while (num > 0)
 
     return count
 
