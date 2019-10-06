@@ -80,7 +80,7 @@ fun digitNumber(n: Int): Int {
     do {
         count++
         num /= 10
-    } while (num > 0)
+    } while (num % 10 != 0)
 
     return count
 
@@ -268,15 +268,18 @@ fun isPalindrome(n: Int): Boolean = (revert(n) == n)
  */
 fun hasDifferentDigits(n: Int): Boolean{
     var number = n
-    val numeral = number % 10.0
-    val count = digitNumber(n)
-    var mult = 1
+    val count = digitNumber(number)
+    var def1 = number % 10
+    var def2 = 0
     if (count == 1) return false
     while (number > 0){
-        mult *= number % 10
+        def2 = number % 10
+        if (def2 != def1) break
+        def1 = def2
         number /= 10
     }
-    return mult != numeral.pow(count).toInt()
+    return if (def2 == def1) false
+    else true
 }
 
 /**
