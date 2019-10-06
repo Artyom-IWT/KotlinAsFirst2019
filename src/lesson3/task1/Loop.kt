@@ -278,8 +278,7 @@ fun hasDifferentDigits(n: Int): Boolean{
         def1 = def2
         number /= 10
     }
-    return if (def2 == def1) false
-    else true
+    return (def2 != def1)
 }
 
 /**
