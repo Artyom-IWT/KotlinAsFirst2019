@@ -80,7 +80,7 @@ fun digitNumber(n: Int): Int {
     do {
         count++
         num /= 10
-    } while (num % 10 != 0)
+    } while (abs(num) > 0)
 
     return count
 
@@ -98,7 +98,7 @@ fun fib(n: Int): Int {
     var valuefib2 = 1
     var valuefib: Int
 
-    for (i in 3..n){
+    for (i in 3..n) {
         valuefib = valuefib1 + valuefib2
         valuefib1 = valuefib2
         valuefib2 = valuefib
@@ -114,7 +114,7 @@ fun fib(n: Int): Int {
  */
 fun lcm(m: Int, n: Int): Int {
     val mult = m * n
-    for(i in max(n, m)..mult step max(n, m)){
+    for (i in max(n, m)..mult step max(n, m)) {
         if ((i % n == 0) && (i % m == 0)) return i
     }
      return mult
@@ -126,10 +126,10 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..sqrt(n.toDouble()).toInt()){
+    for (i in 2..sqrt(n.toDouble()).toInt()) {
         if (n % i == 0) return i
     }
-return n
+    return n
 }
 
 /**
@@ -138,7 +138,7 @@ return n
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int{
-    for (i in n / 2 downTo 1){
+    for (i in n / 2 downTo 1) {
         if (n % i == 0) return i
     }
     return n
@@ -155,7 +155,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     var N = max(n, m)
     var M = min(m, n)
 
-    while (N != M){
+    while (N != M) {
         if (N > M) N -= M
         else M -= N
     }
@@ -170,7 +170,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean{
+fun squareBetweenExists(m: Int, n: Int): Boolean {
     val rM = sqrt(m.toDouble()).toInt()
     val rN = sqrt(n.toDouble()).toInt()
     return (rM < rN) || (n == sqr(rN)) || (m == sqr(rM))
@@ -192,13 +192,13 @@ fun squareBetweenExists(m: Int, n: Int): Boolean{
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int{
+fun collatzSteps(x: Int): Int {
     var count = 0
     var def = x
-    while (def > 1){
+    while (def > 1) {
         if (def % 2 == 0) def /= 2
         else def = 3 * def + 1
-        count ++
+        count++
     }
     return count
 }
@@ -232,17 +232,17 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int{
+fun revert(n: Int): Int {
     var def = n
-    var count = digitNumber(n)
+    var count = digitNumber(n) - 1
     var rev = 0
 
-    while (def > 0){
-        rev += (def % 10) * 10.0.pow(count - 1).toInt()
-        count --
+    while (def > 0) {
+        rev += ((def % 10) * 10.0.pow(count).toInt())
+        count--
         def /= 10
     }
-return rev
+    return rev
 }
 
 
@@ -266,13 +266,13 @@ fun isPalindrome(n: Int): Boolean = (revert(n) == n)
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean{
+fun hasDifferentDigits(n: Int): Boolean {
     var number = n
     val count = digitNumber(number)
     var def1 = number % 10
     var def2 = 0
     if (count == 1) return false
-    while (number > 0){
+    while (number > 0) {
         def2 = number % 10
         if (def2 != def1) break
         def1 = def2
@@ -295,13 +295,13 @@ fun squareSequenceDigit(n: Int): Int {
     var def2 = 0
     var s = 0
 
-    while (s < n){
+    while (s < n) {
         def2 = sqr(def1)
         s += digitNumber(def2)
-        def1 ++
+        def1++
     }
-    if (s < 4) return def2
-    else return def2 / 10.0.pow((s - n)).toInt() % 10
+    return if (s < 4) def2
+    else def2 / 10.0.pow((s - n)).toInt() % 10
 }
 
 /**
@@ -318,12 +318,12 @@ fun fibSequenceDigit(n: Int): Int {
     var deff = 0
     var s = 0
 
-    while (s < n){
+    while (s < n) {
         deff = fib(def1)
         s += digitNumber(deff)
-        def1 ++
+        def1++
     }
-    if (s < 3) return deff
-    else return deff / 10.0.pow((s - n)).toInt() % 10
+    return if (s < 3) deff
+    else deff / 10.0.pow((s - n)).toInt() % 10
 
 }
