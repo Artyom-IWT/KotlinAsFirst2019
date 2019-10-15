@@ -75,12 +75,12 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var count = 0
-    var num = n
+    var num = abs(n)
 
     do {
         count++
         num /= 10
-    } while (abs(num) > 0)
+    } while (num > 0)
 
     return count
 
@@ -114,10 +114,11 @@ fun fib(n: Int): Int {
  */
 fun lcm(m: Int, n: Int): Int {
     val mult = m * n
-    for (i in max(n, m)..mult step max(n, m)) {
+    val max = max(n, m)
+    for (i in max..mult step max) {
         if ((i % n == 0) && (i % m == 0)) return i
     }
-     return mult
+    return mult
 }
 
 /**
@@ -137,11 +138,10 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int{
-    for (i in n / 2 downTo 1) {
-        if (n % i == 0) return i
-    }
-    return n
+fun maxDivisor(n: Int): Int {
+    val max = n
+    val min = minDivisor(n)
+    return max / min
 }
 
 /**
@@ -300,8 +300,7 @@ fun squareSequenceDigit(n: Int): Int {
         s += digitNumber(def2)
         def1++
     }
-    return if (s < 4) def2
-    else def2 / 10.0.pow((s - n)).toInt() % 10
+    return def2 / 10.0.pow((s - n)).toInt() % 10
 }
 
 /**
@@ -323,7 +322,6 @@ fun fibSequenceDigit(n: Int): Int {
         s += digitNumber(deff)
         def1++
     }
-    return if (s < 3) deff
-    else deff / 10.0.pow((s - n)).toInt() % 10
+    return deff / 10.0.pow((s - n)).toInt() % 10
 
 }
