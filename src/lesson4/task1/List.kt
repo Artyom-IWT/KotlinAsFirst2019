@@ -153,7 +153,6 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    if (list.isEmpty()) return list
     val average = mean(list)
     for (i in 0 until list.size) {
         list[i] -= average
@@ -169,11 +168,11 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    var C = 0
+    var c = 0
     for (i in 0 until a.size) {
-        C += a[i] * b[i]
+        c += a[i] * b[i]
     }
-    return C
+    return c
 }
 
 /**
@@ -186,11 +185,9 @@ fun times(a: List<Int>, b: List<Int>): Int {
  */
 fun polynom(p: List<Int>, x: Int): Int {
     val def = x.toDouble()
-    var power = 0
     var sum = 0
     for (i in 0 until p.size) {
-        sum += p[i] * def.pow(power).toInt()
-        power++
+        sum += p[i] * def.pow(i).toInt()
     }
     return sum
 }
@@ -207,12 +204,11 @@ fun polynom(p: List<Int>, x: Int): Int {
 */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     if (list.isEmpty()) return list
-        var sum = list.first()
-        for (i in 1 until list.size) {
-            val element = list[i]
-            list[i] += sum
-            sum += element
-        }
+    var sum = list.first()
+    for (i in 1 until list.size) {
+        list[i] += sum
+        sum += list[i] - sum
+    }
     return list
 }
 
@@ -255,6 +251,7 @@ fun convert(n: Int, base: Int): List<Int> {
     var num = n
     val result = mutableListOf<Int>()
     var index = 0
+    if (num == 0) return listOf(0)
     while (num > 0) {
         result.add((result.size - index), (num % base))
         num /= base
@@ -277,6 +274,7 @@ fun convert(n: Int, base: Int): List<Int> {
 fun convertToString(n: Int, base: Int): String {
     var num = n
     var result = ""
+    if (num == 0) return "0"
     while (num > 0) {
         result += intToChar((num % base))
         num /= base
@@ -341,8 +339,82 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var string = ""
+    val th = n / 1000
+    val t = n % 100 / 10
+    val tTh = n % 100000 / 1000
+    if (tTh != 1) {
+        if (t != 1) string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) +
+                russianT(n) + russianU(n)
+        else string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) + russianT(n)
+    } else {
+        if (t != 1) string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) +
+                russianT(n) + russianU(n)
+        else string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) + russianT(n)
+    }
+    return string.trim()
+}
 
+fun russianU(n: Int): String {
+    val array = arrayOf("", " один", " два", " три", " четыре", " пять", " шесть", " семь", " восемь", " девять")
+    return array[(n % 10)]
+}
+fun russianT(n: Int): String =
+    if (n % 100/ 10 > 0) {
+        if (n % 100 / 10 > 1) when (n % 100 / 10) {
+            2 -> " двадцать"
+            3 -> " тридцать"
+            4 -> " сорок"
+            5 -> " пятьдесят"
+            6 -> " шестьдесят"
+            7 -> " семьдесят"
+            8 -> " восемьдесят"
+            9 -> " девяносто"
+            else -> ""
+        } else when (n % 10) {
+            1 -> " одиннадцать"
+            2 -> " двенадцать"
+            3 -> " тринадцать"
+            4 -> " четырнадцать"
+            5 -> " пятнадцать"
+            6 -> " шестнадцать"
+            7 -> " семнадцать"
+            8 -> " восемнадцать"
+            9 -> " девятнадцать"
+            else -> " десять"
+        }
+    } else ""
+
+fun russianH(n: Int): String = when (n % 1000 / 100) {
+    1 -> " сто"
+    2 -> " двести"
+    3 -> " триста"
+    4 -> " четыреста"
+    5 -> " пятьсот"
+    6 -> " шестьсот"
+    7 -> " семьсот"
+    8 -> " восемьсот"
+    9 -> " девятьсот"
+    else -> ""
+}
+fun russianTh(n: Int): String =
+    if (n % 100000 / 10000 != 1) {
+        when ((n % 10000) / 1000) {
+            1 -> " одна"
+            2 -> " две"
+            else -> russianU(((n % 10000) / 1000))
+        }
+    } else ""
+
+fun russianThEnding(n: Int): String {
+    var string = ""
+    if (n / 1000 > 1) {
+        if ((n % 10000 / 1000 in 2..4) && (n % 100000 / 10000 != 1)) return " тысячи"
+        else if (((n % 10000 / 1000) == 1) && (n % 100000 / 10000 != 1)) return " тысяча"
+        else return " тысяч"
+    } else return string
+}
 
 
 
