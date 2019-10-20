@@ -353,7 +353,7 @@ fun russian(n: Int): String {
                 russianT(n) + russianU(n)
         else string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) + russianT(n)
     }
-    return string.trim()
+    return string.substring(1, string.length)
 }
 
 fun russianU(n: Int): String {
@@ -408,16 +408,13 @@ fun russianTh(n: Int): String =
     } else ""
 
 fun russianThEnding(n: Int): String {
-    var string = ""
+    val string = ""
     if (n / 1000 > 1) {
         if ((n % 10000 / 1000 in 2..4) && (n % 100000 / 10000 != 1)) return " тысячи"
         else if (((n % 10000 / 1000) == 1) && (n % 100000 / 10000 != 1)) return " тысяча"
         else return " тысяч"
     } else return string
 }
-
-
-
 
 
 fun charToInt(x: Char): Int {
