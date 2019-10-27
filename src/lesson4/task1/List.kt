@@ -204,10 +204,8 @@ fun polynom(p: List<Int>, x: Int): Int {
 */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     if (list.isEmpty()) return list
-    var sum = list.first()
     for (i in 1 until list.size) {
-        list[i] += sum
-        sum += list[i] - sum
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -344,16 +342,16 @@ fun russian(n: Int): String {
     val th = n / 1000
     val t = n % 100 / 10
     val tTh = n % 100000 / 1000
-    if (tTh != 1) {
-        if (t != 1) string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) +
+    string += if (tTh != 1) {
+        if (t != 1) russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) +
                 russianT(n) + russianU(n)
-        else string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) + russianT(n)
+        else russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) + russianT(n)
     } else {
-        if (t != 1) string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) +
+        if (t != 1) russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) +
                 russianT(n) + russianU(n)
-        else string += russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) + russianT(n)
+        else russianH(th) + russianT(th) + russianTh(n) + russianThEnding(n) + russianH(n) + russianT(n)
     }
-    return string.substring(1, string.length)
+    return string.trim()
 }
 
 fun russianU(n: Int): String {
@@ -408,12 +406,11 @@ fun russianTh(n: Int): String =
     } else ""
 
 fun russianThEnding(n: Int): String {
-    val string = ""
-    if (n / 1000 > 1) {
-        if ((n % 10000 / 1000 in 2..4) && (n % 100000 / 10000 != 1)) return " тысячи"
-        else if (((n % 10000 / 1000) == 1) && (n % 100000 / 10000 != 1)) return " тысяча"
-        else return " тысяч"
-    } else return string
+    return if (n / 1000 > 1) {
+        if ((n % 10000 / 1000 in 2..4) && (n % 100000 / 10000 != 1)) " тысячи"
+        else if (((n % 10000 / 1000) == 1) && (n % 100000 / 10000 != 1)) " тысяча"
+        else " тысяч"
+    } else return ""
 }
 
 
@@ -422,8 +419,4 @@ fun charToInt(x: Char): Int {
     return if (char > 96) char - 87
     else x.toString().toInt()
 }
-fun intToChar(x: Int): String {
-    val string = ""
-    return if (x > 9) string + (x + 87).toChar()
-    else string + "$x"
-}
+fun intToChar(x: Int): String = if (x > 9) (x + 87).toChar().toString() else "$x"
