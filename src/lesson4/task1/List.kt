@@ -203,7 +203,6 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
 */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isEmpty()) return list
     for (i in 1 until list.size) {
         list[i] += list[i - 1]
     }
@@ -405,13 +404,11 @@ fun russianTh(n: Int): String =
         }
     } else ""
 
-fun russianThEnding(n: Int): String {
-    return if (n / 1000 > 1) {
-        if ((n % 10000 / 1000 in 2..4) && (n % 100000 / 10000 != 1)) " тысячи"
-        else if (((n % 10000 / 1000) == 1) && (n % 100000 / 10000 != 1)) " тысяча"
-        else " тысяч"
-    } else return ""
-}
+fun russianThEnding(n: Int): String = if (n / 1000 > 1) {
+    if ((n % 10000 / 1000 in 2..4) && (n % 100000 / 10000 != 1)) " тысячи"
+    else if (((n % 10000 / 1000) == 1) && (n % 100000 / 10000 != 1)) " тысяча"
+    else " тысяч"
+} else ""
 
 
 fun charToInt(x: Char): Int {
