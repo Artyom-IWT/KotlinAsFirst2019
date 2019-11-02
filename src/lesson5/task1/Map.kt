@@ -199,7 +199,17 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var result: String? = null
+    var minPrice = 0.0
+    for ((name, pair) in stuff) {
+        if ((pair.first == kind) && ((pair.second <= minPrice) || (minPrice == 0.0))) {
+                minPrice = pair.second
+                result = name
+            }
+    }
+    return result
+}
 
 /**
  * Средняя
@@ -210,7 +220,11 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    for (i in 0 until word.length)
+        if ((word[i].toUpperCase() !in chars) && (word[i].toLowerCase() !in chars)) return false
+        return true
+    }
 
 /**
  * Средняя
@@ -224,7 +238,16 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val result = mutableMapOf<String, Int>()
+    for (element in list) {
+        result[element] = result.getOrPut(element, {0}) + 1
+    }
+    for ((element, count) in result) { // тесты ругаются на этот цикл, в чем ошибка?
+        if (count < 2) result -= element
+    }
+    return result
+}
 
 /**
  * Средняя
