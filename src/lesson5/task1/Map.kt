@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -203,7 +205,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     var result: String? = null
     var minPrice = 0.0
     for ((name, pair) in stuff) {
-        if ((pair.first == kind) && ((pair.second <= minPrice) || (minPrice == 0.0))) {
+        if ((pair.first == kind) && ((pair.second < minPrice) || (minPrice == 0.0))) {
                 minPrice = pair.second
                 result = name
             }
@@ -243,8 +245,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     for (element in list) {
         result[element] = result.getOrPut(element, {0}) + 1
     }
-    for ((element, count) in result) { // тесты ругаются на этот цикл, в чем ошибка?
-        if (count < 2) result -= element
+    for ((key, value) in result) {
+        if (value < 2) result -= key
     }
     return result
 }
@@ -303,7 +305,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in 0 until (list.size - 1)) {
+        for (j in 1 until list.size) {
+            if ((list[i] + list[j]) == number) return Pair(i, j)
+        }
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная
@@ -326,4 +335,31 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val m = mutableListOf<Int>()
+    val p = mutableListOf<Int>()
+    val names = mutableListOf<String>()
+    val result = mutableSetOf<String>()
+    for ((name, values) in treasures) {
+        m.add(values.first)
+        p.add(values.second)
+        names.add(name)
+    }
+    val a = Array(treasures.size + 1) {Array(capacity + 1) {0}}
+    for (i in 1..treasures.size) {
+        for (j in 1..capacity) {
+            a[i][j] = if (j >= m[i - 1]) max((p[i - 1] + a[i - 1][j - m[i - 1]]), a[i - 1][j])
+            else a[i - 1][j]
+        }
+    }
+    var size = treasures.size
+    var weight = capacity
+    while ((size > 0) && (weight > 0)) {
+        size--
+        if (a[size + 1][weight] != a[size][weight]) {
+            result.add(names[size])
+            weight -= m[size]
+        }
+    }
+    return result
+}
