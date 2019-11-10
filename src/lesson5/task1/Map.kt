@@ -114,7 +114,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     for ((first, second) in a) {
-        if (a[first] != b[first]) return false
+        if (second != b[first]) return false
     }
     return true
 }
@@ -135,7 +135,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
     for ((first, second) in b) {
-        if (a[first] == b[first]) a.remove(first)
+        if (second == b[first]) a.remove(first)
     }
 }
 
@@ -206,9 +206,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     var minPrice = 0.0
     for ((name, pair) in stuff) {
         if ((pair.first == kind) && ((pair.second < minPrice) || (minPrice == 0.0))) {
-                minPrice = pair.second
-                result = name
-            }
+            minPrice = pair.second
+            result = name
+        }
     }
     return result
 }
@@ -222,11 +222,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    for (i in 0 until word.length)
-        if ((word[i].toUpperCase() !in chars) && (word[i].toLowerCase() !in chars)) return false
-        return true
-    }
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toSet().intersect(chars.toSet()) == word.toSet()
 
 /**
  * Средняя
@@ -243,14 +239,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val result = mutableMapOf<String, Int>()
     for (element in list) {
-        result[element] = result.getOrPut(element, {0}) + 1
+        result[element] = result.getOrPut(element, { 0 }) + 1
     }
-    for ((key, value) in result) {
-        if (value < 2) result -= key
-    }
-    return result
+    return result.filterValues { it >= 2 }
 }
-
 /**
  * Средняя
  *

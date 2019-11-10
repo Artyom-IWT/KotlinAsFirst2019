@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -69,7 +71,19 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ").toList()
+    return try {
+        val day = parts[0].toInt()
+        val month = russianMonthToInt(parts[1])
+        val year = parts[2].toInt()
+        if ((day > daysInMonth(month, year)) || (month !in 1..12)) ""
+        else String.format("%02d.%02d.%d", day, month, year)
+    }
+    catch (e: Exception) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -81,7 +95,19 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".").toList()
+    return try {
+        val day = parts[0].toInt()
+        val year = parts[2].toInt()
+        val month = russianIntToMonth(parts[1].toInt())
+        if ((day > daysInMonth(parts[1].toInt(), year)) || (month == "") || (parts.size > 3)) ""
+        else "$day $month $year"
+    }
+    catch (e: Exception) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -209,3 +235,35 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
+fun russianMonthToInt(str: String): Int = when (str) {
+    "января" -> 1
+    "февраля" -> 2
+    "марта" -> 3
+    "апреля" -> 4
+    "мая" -> 5
+    "июня" -> 6
+    "июля" -> 7
+    "августа" -> 8
+    "сентября" -> 9
+    "октября" -> 10
+    "ноября" -> 11
+    "декабря" -> 12
+    else -> 0
+}
+fun russianIntToMonth(n: Int): String = when (n) {
+    1 -> "января"
+    2 -> "февраля"
+    3 -> "марта"
+    4 -> "апреля"
+    5 -> "мая"
+    6 -> "июня"
+    7 -> "июля"
+    8 -> "августа"
+    9 -> "сентября"
+    10 -> "октября"
+    11 -> "ноября"
+    12 -> "декабря"
+    else -> ""
+}
+
