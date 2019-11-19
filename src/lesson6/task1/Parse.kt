@@ -72,15 +72,14 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val parts = str.split(" ").toList()
+    val parts = str.split(" ")
     return try {
         val day = parts[0].toInt()
         val month = russianMonthToInt(parts[1])
         val year = parts[2].toInt()
-        if ((day > daysInMonth(month, year)) || (month !in 1..12)) ""
+        if ((day > daysInMonth(month, year)) || (month !in 1..12) || (parts.size < 3)) ""
         else String.format("%02d.%02d.%d", day, month, year)
-    }
-    catch (e: Exception) {
+    } catch (e: Exception) {
         ""
     }
 }
@@ -96,15 +95,14 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    val parts = digital.split(".").toList()
+    val parts = digital.split(".")
     return try {
         val day = parts[0].toInt()
         val year = parts[2].toInt()
         val month = russianIntToMonth(parts[1].toInt())
         if ((day > daysInMonth(parts[1].toInt(), year)) || (month == "") || (parts.size > 3)) ""
         else "$day $month $year"
-    }
-    catch (e: Exception) {
+    } catch (e: Exception) {
         ""
     }
 }
@@ -135,7 +133,15 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if (("[^\\d-% ]".toRegex().find(jumps) != null) || ("\\d".toRegex().find(jumps) == null)) return -1
+    val list = jumps.split("[- %]+".toRegex())
+    var max = -1
+    for (i in 0 until list.size) {
+        if (list[i].toInt() > max) max = list[i].toInt()
+    }
+    return max
+}
 
 /**
  * Сложная
@@ -148,7 +154,16 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if (("[^\\d %+-]".toRegex().find(jumps) != null) || ("\\d".toRegex().find(jumps) == null)) return -1
+    val list = "\\d+\\s\\+".toRegex().findAll(jumps).toList().map { it.value }.toMutableList()
+    var max = -1
+    for (i in 0 until list.size) {
+        list[i] = "[ +]".toRegex().replace(list[i], "")
+        if (list[i].toInt() > max) max = list[i].toInt()
+    }
+    return max
+}
 
 /**
  * Сложная
@@ -159,7 +174,24 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (expression.matches(Regex("""(\d+\s[-+]\s\d+)+|\d+"""))) {
+        val list = expression.split(" ")
+        var result: Int
+        if (list[0].contains("\\d+".toRegex())) result = list[0].toInt()
+        else throw IllegalArgumentException(expression)
+        for (i in 1 until list.size - 1 step 2 ) {
+            if ((list[i+1].contains("+")) && (list[i+1].contains("-")))
+                throw IllegalArgumentException(expression)
+            when {
+                list[i] == "+" -> result += list[i + 1].toInt()
+                list[i] == "-" -> result -= list[i + 1].toInt()
+                else -> throw IllegalArgumentException(expression)
+            }
+        }
+        return result
+    } else throw IllegalArgumentException(expression)
+}
 
 /**
  * Сложная
@@ -183,7 +215,20 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+        var biggestPrice = 0.0
+        var result = ""
+        val list = description.split("; ").toMutableList().map { it.split(" ") }
+        for (i in 0 until list.size) {
+            if (list[i].size < 2) return result
+            val pair = list[i]
+            if (pair[1].toDouble() >= biggestPrice) {
+                biggestPrice = pair[1].toDouble()
+                result = pair[0]
+            }
+        }
+    return result
+}
 
 /**
  * Сложная
@@ -234,7 +279,45 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO() /* {  еще думаю
+    if (commands.contains(Regex("""[^><+\-\[\]\s]"""))) throw IllegalArgumentException()
+    val listOfBrackets = Regex("""[\[\]]""").findAll(commands).toList().map { it.value }
+    var bracketsCount = 0
+    for (element in listOfBrackets) {
+        if ((element == "]") && (bracketsCount == 0)) throw IllegalArgumentException()
+        else if (element == "[") bracketsCount++
+        else bracketsCount--
+
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 fun russianMonthToInt(str: String): Int = when (str) {
     "января" -> 1
