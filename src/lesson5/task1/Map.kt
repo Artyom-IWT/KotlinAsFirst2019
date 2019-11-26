@@ -133,7 +133,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
     for ((first, second) in b) {
         if (second == a[first]) a.remove(first)
     }
@@ -223,8 +223,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean =
-    (word.toLowerCase().toSet().intersect(chars.toString().toLowerCase().toSet()) == word.toSet()) ||
-            (word.toUpperCase().toSet().intersect(chars.toString().toUpperCase().toSet()) == word.toSet())
+    (word.toUpperCase().toSet().intersect(chars.joinToString().toUpperCase().toSet()) == word.toUpperCase().toSet())
 
 /**
  * Средняя

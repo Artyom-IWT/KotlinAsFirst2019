@@ -177,7 +177,7 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     if (expression.matches(Regex("""(\d+\s[-+]\s\d+)+|\d+"""))) {
         val list = expression.split(" ")
-        var result: Int
+        var result = 0
         if (list[0].contains("\\d+".toRegex())) result = list[0].toInt()
         else throw IllegalArgumentException(expression)
         for (i in 1 until list.size - 1 step 2 ) {
@@ -216,17 +216,17 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String {
-        var biggestPrice = 0.0
-        var result = ""
-        val list = description.split("; ").toMutableList().map { it.split(" ") }
-        for (i in 0 until list.size) {
-            if (list[i].size < 2) return result
-            val pair = list[i]
-            if (pair[1].toDouble() >= biggestPrice) {
+    var biggestPrice = 0.0
+    var result = ""
+    val list = description.split("; ").map { it.split(" ") }
+    for (i in 0 until list.size) {
+        if (list[i].size < 2) return ""
+        val pair = list[i]
+        if (pair[1].toDouble() >= biggestPrice) {
                 biggestPrice = pair[1].toDouble()
                 result = pair[0]
-            }
         }
+    }
     return result
 }
 
@@ -279,7 +279,7 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO() /* {  еще думаю
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.contains(Regex("""[^><+\-\[\]\s]"""))) throw IllegalArgumentException()
     val listOfBrackets = Regex("""[\[\]]""").findAll(commands).toList().map { it.value }
     var bracketsCount = 0
@@ -287,8 +287,55 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TO
         if ((element == "]") && (bracketsCount == 0)) throw IllegalArgumentException()
         else if (element == "[") bracketsCount++
         else bracketsCount--
+    }
+    if (bracketsCount % 2 != 0) throw IllegalArgumentException()
+    val result = mutableListOf<Int>()
+    for (i in 0 until cells) {
+        result.add(i, 0)
+    }
+    var pos = cells / 2
+    var command = 0
+    var commandCount = 0
+    fun brackets(c: Char): Int {
+        var count = 0
+        if ((c == '[') && (result[pos] != 0)) return command
+        if ((c == '[') && (result[pos] == 0)) {
+            for (i in (command + 1) until commands.length) {
+                if (commands[i] == '[') count++
+                if (commands[i] == ']') {
+                    if (count == 0) return i
+                    else count--
+                }
+            }
+        }
+        if ((c == ']') && (result[pos] == 0)) return command
+        if ((c == ']') && (result[pos] != 0)) {
+            for (i in (command - 1) downTo 0) {
+                if (commands[i] == ']') count ++
+                if (commands[i] =='[') {
+                    if (count == 0) return i
+                    else count--
+                }
+            }
+        }
+        return 0
+    }
+    while ((commandCount < limit) && (command < commands.length)) {
+        commandCount++
+        when (commands[command]) {
+            '+' -> result[pos]++
+            '-' -> result[pos]--
+            '>' -> pos++
+            '<' -> pos--
+            ' ' -> ""
+            else -> command = brackets(commands[command])
+        }
+        command++
+        if ((pos >= result.size) || (pos < 0)) throw IllegalStateException()
+    }
+    return result
+}
 
-} */
 
 
 
