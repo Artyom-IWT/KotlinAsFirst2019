@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.absoluteValue
 
 /**
  * Пример
@@ -53,7 +54,25 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val result = mutableMapOf<String, Int>()
+    for (w in substrings) {
+        result[w] = 0
+    }
+    val file = File(inputName).readLines()
+    for (str in substrings) {
+        for (l in file) {
+            var line = l.toUpperCase()
+            while (line.contains(str.toUpperCase())) {
+                if (line.substring(0, str.length).contains(str.toUpperCase())) {
+                    result[str] = result[str]!! + 1
+                }
+                line = line.substring(1, line.length)
+            }
+        }
+    }
+    return result
+}
 
 
 /**
@@ -90,8 +109,19 @@ fun sibilants(inputName: String, outputName: String) {
  * 4) Число строк в выходном файле должно быть равно числу строк во входном (в т. ч. пустых)
  *
  */
-fun centerFile(inputName: String, outputName: String) {
-    TODO()
+ fun centerFile(inputName: String, outputName: String) {
+    var max = 0
+    val writer = File(outputName).bufferedWriter()
+    for (line in File(inputName).readLines()) {
+        if (line.trim().length > max) max = line.trim().length
+    }
+    for (line in File(inputName).readLines()) {
+        var result = ""
+        while (result.length < (max - line.trim().length) / 2) result += " "
+        writer.write((result + line.trim()))
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
@@ -143,7 +173,18 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    val input = File(inputName).readLines()
+    val result = mutableMapOf<String, Int>()
+    for (line in input) {
+        val list = "[a-zA-Zа-яА-ЯёЁ]+".toRegex().findAll(line).toList().map{ it.value }
+        for (word in list) {
+            result[word.toLowerCase()] = result.getOrPut(word.toLowerCase(), { 0 }) + 1
+        }
+    }
+    return if (result.size < 20) result
+    else result.toList().sortedByDescending { it.second }.take(20).toMap()
+}
 
 /**
  * Средняя
