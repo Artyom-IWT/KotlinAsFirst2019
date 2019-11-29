@@ -64,9 +64,8 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         for (l in file) {
             var line = l.toUpperCase()
             while (line.contains(str.toUpperCase())) {
-                if (line.substring(0, str.length).toUpperCase().contains(str.toUpperCase())) {
+                if (line.substring(0, str.length).contains(str.toUpperCase()))
                     result[str] = result[str]!! + 1
-                }
                 line = line.substring(1, line.length)
             }
         }
