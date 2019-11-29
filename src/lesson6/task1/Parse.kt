@@ -277,7 +277,7 @@ fun fromRoman(roman: String): Int = TODO()
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.contains(Regex("""[^><+\-\[\]\s]"""))) throw IllegalArgumentException()
-    val listOfBrackets = Regex("""[\[\]]""").findAll(commands).toList().map { it.value }
+    val listOfBrackets = Regex("""[\[\]]+""").findAll(commands).toList().map { it.value }
     var bracketsCount = 0
     for (element in listOfBrackets) {
         if ((element == "]") && (bracketsCount == 0)) throw IllegalArgumentException()
