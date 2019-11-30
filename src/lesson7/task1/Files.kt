@@ -221,7 +221,15 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val map = dictionary.map { it.key.toLowerCase() to it.value }.toMap()
+    for (letter in File(inputName).readText()) {
+        if (map.containsKey(letter.toLowerCase())) {
+            if (letter.isUpperCase()) writer.write((map[letter.toLowerCase()]?.toLowerCase() ?: error("")).capitalize())
+            else writer.write((map[letter.toLowerCase()] ?: error("")).toLowerCase())
+        } else writer.write(letter.toString())
+    }
+    writer.close()
 }
 
 /**
@@ -249,9 +257,23 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
-}
+    //исправил тест, т.к. слово "Боязливый" не имеет повторяющихся букв
+    fun different(s: String): Boolean {
+        for (c1 in 0 until s.length - 2) {
+            for (c2 in c1 + 1 until s.length - 1)
+                if (s[c1].toUpperCase() == s[c2].toUpperCase()) return false
+        }
+        return true
+    }
 
+    val writer = File(outputName).bufferedWriter()
+    val resultList = mutableListOf<String>()
+    for (word in File(inputName).readLines()) {
+        if (different(word)) resultList.add(word)
+    }
+    writer.write(resultList.joinToString(separator = ", "))
+    writer.close()
+}
 /**
  * Сложная
  *

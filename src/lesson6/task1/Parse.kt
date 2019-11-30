@@ -278,13 +278,13 @@ fun fromRoman(roman: String): Int = TODO()
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.contains(Regex("""[^><+\-\[\]\s]"""))) throw IllegalArgumentException()
     val listOfBrackets = Regex("""[\[\]]""").findAll(commands).toList().map { it.value }
-    var bracketsCount = 0
+    var bracketsFront = 0
+    var bracketsBack = 0
     for (element in listOfBrackets) {
-        if ((element == "]") && (bracketsCount == 0)) throw IllegalArgumentException()
-        else if (element == "[") bracketsCount++
-        else bracketsCount--
+        if (element == "[") bracketsFront++
+        if (element == "]") bracketsBack++
     }
-    if (bracketsCount % 2 != 0) throw IllegalArgumentException()
+    if (bracketsFront != bracketsBack) throw IllegalArgumentException()
     val result = mutableListOf<Int>()
     for (i in 0 until cells) {
         result.add(i, 0)
