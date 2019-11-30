@@ -281,6 +281,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var bracketsFront = 0
     var bracketsBack = 0
     for (element in listOfBrackets) {
+        if (element == "]" && bracketsFront == 0) throw IllegalArgumentException()
         if (element == "[") bracketsFront++
         if (element == "]") bracketsBack++
     }
