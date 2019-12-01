@@ -150,8 +150,32 @@ fun sibilants(inputName: String, outputName: String) {
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
-fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+fun alignFileByWidth(inputName: String, outputName: String) {  TODO()/* ещё не решил
+    val writer = File(outputName).bufferedWriter()
+    val reader = File(inputName).readLines()
+    var max = 0
+    val reg = Regex("\\s+")
+    for (line in reader) {
+        if (line.trim().replace(reg, " ").length > max)
+            max = line.trim().replace(reg, " ").length
+    }
+    for (line in reader) {
+        if (line.isNotBlank()) {
+            val list =
+                line.trim().replace(reg, " ").split(" ").map{ it.trim() }.toMutableList()
+            val different = max - line.trim().replace(reg, " ").length
+            var space = 0
+            for (w in 0 until list.size - 1) {
+                if (space < different) {
+                    list[w] = list[w] + ' '
+                    space++
+                }
+            }
+            writer.write(list.joinToString("").trim())
+        }
+        writer.newLine()
+    }
+    writer.close() */
 }
 
 /**
@@ -271,6 +295,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     for (word in File(inputName).readLines()) {
         if (different(word)) resultList.add(word)
     }
+    if (resultList.isEmpty()) writer.write("")
     writer.write(resultList.joinToString(separator = ", "))
     writer.close()
 }
@@ -320,7 +345,59 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    writer.write("<html>\n<body>\n")
+    var countP = 0
+    var countI = 0
+    var countB = 0
+    var countS = 0
+    val set = setOf("*", "~")
+    for (line in File(inputName).readLines()) {
+        val list = line.toList().map { it.toString() }.toMutableList()
+        if (countP == 0 && line.isNotEmpty()) {
+            writer.write("<p>")
+            writer.newLine()
+            countP++
+        }
+        if (countP != 0 && line.isEmpty()) {
+            writer.write("</p>")
+            writer.newLine()
+            countP--
+        }
+        for (i in 0 until list.size) {
+            if (list[i] == "*" && i < list.size - 1 && list[i + 1] == "*" && countB == 0) {
+                list[i] = "<b>"
+                list[i + 1] = ""
+                countB++
+            }
+            if (list[i] == "*" && i < list.size - 1 && list[i + 1] == "*" && countB != 0) {
+                list[i] = "</b>"
+                countB--
+                list[i + 1] = ""
+            }
+            if (list[i] == "*" && countI == 0) {
+                list[i] = "<i>"
+                countI++
+            }
+            if (list[i] == "*" && countI != 0) {
+                list[i] = "</i>"
+                countI--
+            }
+            if (list[i] == "~" && i < list.size - 1 && list[i + 1] == "~" && countS == 0) {
+                list[i] = "<s>"
+                countS++
+                list[i + 1] = ""
+            }
+            if (list[i] == "~" && i < list.size - 1 && list[i + 1] == "~" && countS != 0) {
+                list[i] = "</s>"
+                countS--
+                list[i + 1] = ""
+            }
+        }
+        writer.write(list.joinToString(""))
+    }
+    writer.write("</p>\n</body>\n</html>")
+    writer.close()
 }
 
 /**
