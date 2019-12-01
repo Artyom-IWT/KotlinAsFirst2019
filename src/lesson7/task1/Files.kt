@@ -150,32 +150,39 @@ fun sibilants(inputName: String, outputName: String) {
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
-fun alignFileByWidth(inputName: String, outputName: String) {  TODO()/* ещё не решил
+fun alignFileByWidth(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val reader = File(inputName).readLines()
     var max = 0
     val reg = Regex("\\s+")
+
+    fun replace (s: String): String = s.trim().replace(reg, " ")
+
     for (line in reader) {
-        if (line.trim().replace(reg, " ").length > max)
-            max = line.trim().replace(reg, " ").length
+        if (replace(line).length > max) max = replace(line).length
     }
     for (line in reader) {
         if (line.isNotBlank()) {
-            val list =
-                line.trim().replace(reg, " ").split(" ").map{ it.trim() }.toMutableList()
-            val different = max - line.trim().replace(reg, " ").length
-            var space = 0
+            val list = replace(line).split(" ").toMutableList()
             for (w in 0 until list.size - 1) {
-                if (space < different) {
-                    list[w] = list[w] + ' '
-                    space++
-                }
+                list[w] = "${list[w]} "
             }
-            writer.write(list.joinToString("").trim())
+            if (list.size == 1) writer.write(list[0].trim())
+            else {
+                var different = max - replace(line).length
+                var space = 0
+                while (different != 0) {
+                    different--
+                    list[space] = "${list[space]} "
+                    space++
+                    if (space == list.size - 1) space = 0
+                }
+                writer.write(list.joinToString(""))
+            }
         }
         writer.newLine()
     }
-    writer.close() */
+    writer.close()
 }
 
 /**
@@ -346,8 +353,8 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    writer.write("<html>\n<body>\n")
-    var countP = 0
+    writer.write("<html>\n<body>\n<p>\n")
+    var countP = 1
     var countI = 0
     var countB = 0
     var countS = 0
