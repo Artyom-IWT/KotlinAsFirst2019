@@ -55,21 +55,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val result = mutableMapOf<String, Int>()
-    for (w in substrings) {
-        result[w] = 0
-    }
-    val file = File(inputName).readLines()
-    for (str in substrings) {
-        for (l in file) {
-            var line = l.toUpperCase()
-            while (line.contains(str.toUpperCase())) {
-                if (line.substring(0, str.length) == str.toUpperCase()) result[str] = result[str]!! + 1
-                line = line.substring(1, line.length)
-            }
-        }
-    }
-    return result
+   TODO()
 }
 
 
@@ -301,7 +287,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val resultList = mutableListOf<String>()
     for (word in File(inputName).readLines()) {
-        if (different(word)) resultList.add(word)
+        if (different(word) && word.length > 1) resultList.add(word)
     }
     if (resultList.isEmpty()) writer.write("")
     writer.write(resultList.joinToString(separator = ", "))
@@ -361,12 +347,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var countS = 0
     for (line in File(inputName).readLines()) {
         val list = line.toList().map { it.toString() }.toMutableList()
-        if (countP == 0 && list.isNotEmpty()) {
+        if (countP == 0 && line.isNotEmpty()) {
             writer.write("<p>")
             writer.newLine()
             countP++
         }
-        if (countP != 0 && list.isEmpty()) {
+        if (countP != 0 && line.isEmpty() && list.isEmpty()) {
             writer.write("</p>")
             writer.newLine()
             countP--
