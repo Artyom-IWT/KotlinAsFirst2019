@@ -64,8 +64,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         for (l in file) {
             var line = l.toUpperCase()
             while (line.contains(str.toUpperCase())) {
-                if (line.substring(0, str.length).contains(str.toUpperCase()))
-                    result[str] = result[str]!! + 1
+                if (line.substring(0, str.length) == str.toUpperCase()) result[str] = result[str]!! + 1
                 line = line.substring(1, line.length)
             }
         }
@@ -110,11 +109,13 @@ fun sibilants(inputName: String, outputName: String) {
  */
  fun centerFile(inputName: String, outputName: String) {
     var max = 0
+    val reader = File(inputName).readLines()
     val writer = File(outputName).bufferedWriter()
-    for (line in File(inputName).readLines()) {
-        if (line.trim().length > max) max = line.trim().length
+    for (line in reader) {
+        val trimmed = line.trim()
+        if (trimmed.length > max) max = trimmed.length
     }
-    for (line in File(inputName).readLines()) {
+    for (line in reader) {
         var result = ""
         while (result.length < (max - line.trim().length) / 2) result += " "
         writer.write((result + line.trim()))
@@ -207,13 +208,12 @@ fun top20Words(inputName: String): Map<String, Int> {
     val input = File(inputName).readLines()
     val result = mutableMapOf<String, Int>()
     for (line in input) {
-        val list = "[a-zA-Zа-яА-ЯёЁ]+".toRegex().findAll(line).toList().map{ it.value }
+        val list = "[ёЁa-zA-Zа-яА-Я]+".toRegex().findAll(line).toList().map{ it.value }
         for (word in list) {
             result[word.toLowerCase()] = result.getOrPut(word.toLowerCase(), { 0 }) + 1
         }
     }
-    return if (result.size < 20) result
-    else result.toList().sortedByDescending { it.second }.take(20).toMap()
+    return result.toList().sortedByDescending { it.second }.take(20).toMap()
 }
 
 /**
@@ -255,9 +255,10 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val writer = File(outputName).bufferedWriter()
     val map = dictionary.map { it.key.toLowerCase() to it.value }.toMap()
     for (letter in File(inputName).readText()) {
-        if (map.containsKey(letter.toLowerCase())) {
-            if (letter.isUpperCase()) writer.write((map[letter.toLowerCase()]?.toLowerCase() ?: error("")).capitalize())
-            else writer.write((map[letter.toLowerCase()] ?: error("")).toLowerCase())
+        val l = letter.toLowerCase()
+        if (map.containsKey(l)) {
+            if (letter.isUpperCase()) writer.write(map[l]?.toLowerCase()!!.capitalize())
+            else writer.write(map[l]!!.toLowerCase())
         } else writer.write(letter.toString())
     }
     writer.close()
@@ -290,8 +291,8 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     //исправил тест, т.к. слово "Боязливый" не имеет повторяющихся букв
     fun different(s: String): Boolean {
-        for (c1 in 0 until s.length - 2) {
-            for (c2 in c1 + 1 until s.length - 1)
+        for (c1 in 0 until s.length - 1) {
+            for (c2 in c1 + 1 until s.length)
                 if (s[c1].toUpperCase() == s[c2].toUpperCase()) return false
         }
         return true
@@ -358,15 +359,14 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var countI = 0
     var countB = 0
     var countS = 0
-    val set = setOf("*", "~")
     for (line in File(inputName).readLines()) {
         val list = line.toList().map { it.toString() }.toMutableList()
-        if (countP == 0 && line.isNotEmpty()) {
+        if (countP == 0 && list.isNotEmpty()) {
             writer.write("<p>")
             writer.newLine()
             countP++
         }
-        if (countP != 0 && line.isEmpty()) {
+        if (countP != 0 && list.isEmpty()) {
             writer.write("</p>")
             writer.newLine()
             countP--
