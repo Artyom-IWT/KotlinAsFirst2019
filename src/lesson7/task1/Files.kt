@@ -275,7 +275,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    //исправил тест, т.к. слово "Боязливый" не имеет повторяющихся букв
+    // прошу прощения за предыдущий комментарий, мне надо было внимательнее читать условие
     fun different(s: String): Boolean {
         for (c1 in 0 until s.length - 1) {
             for (c2 in c1 + 1 until s.length)
@@ -285,12 +285,17 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     }
 
     val writer = File(outputName).bufferedWriter()
+    val reader = File(inputName).readLines()
     val resultList = mutableListOf<String>()
-    for (word in File(inputName).readLines()) {
-        if (different(word)) resultList.add(word)
+    var max = 0
+    for (word in reader) {
+        if (word.length > max) max = word.length
     }
-    if (resultList.isEmpty()) writer.write("")
-    writer.write(resultList.joinToString(separator = ", "))
+    for (word in reader) {
+        if (word.length == max && different(word)) resultList.add(word)
+    }
+    if (resultList.size == 1) writer.write(resultList.joinToString(separator = ""))
+    else writer.write(resultList.joinToString(separator = ", "))
     writer.close()
 }
 /**
