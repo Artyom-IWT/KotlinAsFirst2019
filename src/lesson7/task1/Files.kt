@@ -277,6 +277,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     // прошу прощения за предыдущий комментарий, мне надо было внимательнее читать условие
     fun different(s: String): Boolean {
+        if (s.length == 1) return true
         for (c1 in 0 until s.length - 1) {
             for (c2 in c1 + 1 until s.length)
                 if (s[c1].toUpperCase() == s[c2].toUpperCase()) return false
