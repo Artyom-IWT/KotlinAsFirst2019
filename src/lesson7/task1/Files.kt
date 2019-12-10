@@ -361,7 +361,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         if (countP != 0 && line.isEmpty()) {
             writer.write("</p>")
             writer.newLine()
-            countP--
+            countP = 0
         }
         for (i in 0 until list.size) {
             if (list[i] == "*" && i < list.size - 1 && list[i + 1] == "*" && countB == 0) {
@@ -369,7 +369,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 list[i + 1] = ""
                 countB++
             }
-            if (list[i] == "*" && i < list.size - 1 && list[i + 1] == "*" && countB != 0) {
+            if (list[i] == "*" && i < list.size - 1 && list[i + 1] == "*" && countB == 1) {
                 list[i] = "</b>"
                 countB--
                 list[i + 1] = ""
@@ -378,7 +378,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 list[i] = "<i>"
                 countI++
             }
-            if (list[i] == "*" && countI != 0) {
+            if (list[i] == "*" && countI == 1) {
                 list[i] = "</i>"
                 countI--
             }
@@ -387,7 +387,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 countS++
                 list[i + 1] = ""
             }
-            if (list[i] == "~" && i < list.size - 1 && list[i + 1] == "~" && countS != 0) {
+            if (list[i] == "~" && i < list.size - 1 && list[i + 1] == "~" && countS == 1) {
                 list[i] = "</s>"
                 countS--
                 list[i + 1] = ""
