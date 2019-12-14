@@ -286,15 +286,23 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     }
 
     val writer = File(outputName).bufferedWriter()
-    val reader = File(inputName).readLines()
+    val reader = File(inputName).readLines().sortedByDescending { it.length }
     val resultList = mutableListOf<String>()
+    var e = 0
     var max = 0
     for (word in reader) {
+        if (different(word) && e == 0) {
+            max = word.length
+            e++
+        }
+        if (different(word) && word.length == max) resultList.add(word)
+    }
+   /* for (word in reader) {
         if (word.length > max && different(word)) max = word.length
     }
     for (word in reader) {
         if (word.length == max && different(word)) resultList.add(word)
-    }
+    }*/
     if (resultList.size == 1) writer.write(resultList.joinToString(separator = ""))
     else writer.write(resultList.joinToString(separator = ", "))
     writer.close()
@@ -345,20 +353,21 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
+    val reader = File(inputName).readLines()
     val writer = File(outputName).bufferedWriter()
     writer.write("<html>\n<body>\n<p>\n")
     var countP = 1
     var countI = 0
     var countB = 0
     var countS = 0
-    for (line in File(inputName).readLines()) {
-        val list = line.toList().map { it.toString() }.toMutableList()
-        if (countP == 0 && line.isNotEmpty()) {
+    for (l in 0 until reader.size) {
+        val list = reader[l].toList().map { it.toString() }.toMutableList()
+        if (countP == 0 && reader[l].isNotEmpty()) {
             writer.write("<p>")
             writer.newLine()
             countP++
         }
-        if (countP != 0 && line.isEmpty()) {
+        if (countP != 0 && reader[l].isEmpty() && reader[l - 1].isNotEmpty()) {
             writer.write("</p>")
             writer.newLine()
             countP = 0
