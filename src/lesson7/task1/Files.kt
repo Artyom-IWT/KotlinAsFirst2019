@@ -367,7 +367,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             writer.newLine()
             countP++
         }
-        if (countP != 0 && reader[l].isEmpty() && reader[l - 1].isNotEmpty()) {
+        if (countP != 0 && reader[l].isEmpty() && list.isNotEmpty()) {
             writer.write("</p>")
             writer.newLine()
             countP = 0
