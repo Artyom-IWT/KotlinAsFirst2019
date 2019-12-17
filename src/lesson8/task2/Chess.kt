@@ -2,6 +2,8 @@
 
 package lesson8.task2
 
+import java.lang.IllegalArgumentException
+
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
  * Поэтому, обе координаты клетки (горизонталь row, вертикаль column) могут находиться в пределах от 1 до 8.
@@ -22,7 +24,12 @@ data class Square(val column: Int, val row: Int) {
      * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
      * Для клетки не в пределах доски вернуть пустую строку
      */
-    fun notation(): String = TODO()
+    fun notation(): String {
+        val array = arrayOf("", "a", "b", "c", "d", "e", "f", "g", "h")
+        return if (column !in 1..8 || row !in 1..8) ""
+        else "${array[column]}$row"
+
+    }
 }
 
 /**
@@ -32,7 +39,11 @@ data class Square(val column: Int, val row: Int) {
  * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
  * Если нотация некорректна, бросить IllegalArgumentException
  */
-fun square(notation: String): Square = TODO()
+fun square(notation: String): Square {
+    if (!notation.contains(Regex("""[a-h][1-8]"""))) throw IllegalArgumentException()
+    val list = listOf("", "a", "b", "c", "d", "e", "f", "g", "h")
+    return Square(list.indexOf(notation[0].toString()), notation[1].toString().toInt())
+}
 
 /**
  * Простая
