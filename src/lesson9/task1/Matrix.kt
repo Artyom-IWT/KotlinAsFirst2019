@@ -2,6 +2,9 @@
 
 package lesson9.task1
 
+import java.lang.IllegalArgumentException
+import java.lang.StringBuilder
+
 /**
  * Ячейка матрицы: row = ряд, column = колонка
  */
@@ -41,32 +44,41 @@ interface Matrix<E> {
  * height = высота, width = ширина, e = чем заполнить элементы.
  * Бросить исключение IllegalArgumentException, если height или width <= 0.
  */
-fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> = TODO()
+fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> {
+    if (height <= 0 || width <= 0) throw IllegalArgumentException()
+    return MatrixImpl(height, width, e)
+}
 
 /**
  * Средняя сложность
  *
  * Реализация интерфейса "матрица"
  */
-class MatrixImpl<E> : Matrix<E> {
-    override val height: Int = TODO()
+class MatrixImpl<E> (height: Int, width: Int, e: E) : Matrix<E> {
+    override val height: Int = height
 
-    override val width: Int = TODO()
+    override val width: Int = width
 
-    override fun get(row: Int, column: Int): E = TODO()
+    private val doubleList = MutableList(height) { MutableList(width) {e}}
 
-    override fun get(cell: Cell): E = TODO()
+    override fun get(row: Int, column: Int): E = doubleList[row][column]
+
+    override fun get(cell: Cell): E = get(cell.row, cell.column)
 
     override fun set(row: Int, column: Int, value: E) {
-        TODO()
+        doubleList[row][column] = value
     }
 
     override fun set(cell: Cell, value: E) {
-        TODO()
+        set(cell.row, cell.column, value)
     }
 
-    override fun equals(other: Any?) = TODO()
+    override fun equals(other: Any?) = (other is MatrixImpl<*>) && (this.height == other.height) &&
+            (this.width == other.width) && (this.doubleList == other.doubleList)
 
-    override fun toString(): String = TODO()
+    override fun toString(): String = doubleList.toString()
+    /* не стал делать, как в туториале, т.к. .toString() по умолчанию представляет список, как строку [a, b], и таким же
+    образом будет представлять внутренние списки
+     */
 }
 
