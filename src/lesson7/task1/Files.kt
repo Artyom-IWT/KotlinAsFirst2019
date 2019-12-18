@@ -360,17 +360,17 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var countI = 0
     var countB = 0
     var countS = 0
-    var countA = 1
+    var a = 1
     for (l in 0 until reader.size) {
         val list = reader[l].toList().map { it.toString() }.toMutableList()
-        if (list.isNotEmpty()) countA++
-        else countA = 0
+        if (list.isNotEmpty()) a++
+        else a = 0
         if (countP == 0 && reader[l].isNotEmpty()) {
             writer.write("<p>")
             writer.newLine()
             countP++
         }
-        if (countP != 0 && reader[l].isEmpty() && countA == 0) {
+        if (countP != 0 && reader[l].isEmpty() && a == 0) {
             writer.write("</p>")
             writer.newLine()
             countP = 0
