@@ -40,7 +40,7 @@ data class Square(val column: Int, val row: Int) {
  * Если нотация некорректна, бросить IllegalArgumentException
  */
 fun square(notation: String): Square {
-    if (!notation.contains(Regex("""[a-h][1-8]"""))) throw IllegalArgumentException()
+    if (!notation.matches(Regex("""[a-h][1-8]"""))) throw IllegalArgumentException()
     val list = listOf("", "a", "b", "c", "d", "e", "f", "g", "h")
     return Square(list.indexOf(notation[0].toString()), notation[1].toString().toInt())
 }
