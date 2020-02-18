@@ -26,8 +26,6 @@ http://www.math24.ru/%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%BD%D1%8
      * Конструктор из строки вида x+yi
      */
     constructor(s: String) : this(re = abc(s)[0], im = abc(s)[1])
-    /* this(re = s.split(Regex("""\+|-"""))[0].toDouble(),
-        im = s.substring(0, s.length - 1).split(Regex("""\+|-"""))[1].toDouble())*/
 
     /**
      * Сложение.
