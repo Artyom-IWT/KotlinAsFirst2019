@@ -13,6 +13,22 @@ import lesson4.task1.abs
  *
  * Аргументы конструктора -- вещественная и мнимая часть числа.
  */
+fun complex(s: String) : Complex {
+    val ss = s.substring(0, s.length - 1)
+    val list = ss.split(Regex("""\+|-"""))
+    val symbol = ss.replace(Regex("""\d+"""), "")
+    var real = 0.0
+    var imaginate = 0.0
+    if (symbol.length == 1) {
+        real = list[0].toDouble()
+        imaginate = if (symbol == "+") list[1].toDouble() else list[1].toDouble() * -1
+    } else {
+        real = list[1].toDouble() * -1
+        imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
+    }
+    return Complex(real, imaginate)
+}
+
 class Complex(val re: Double, val im: Double) {
 /* Тесты unaryMinus, minus, times и div исправил, так как были написаны неверно. Доказательства:
      https://programforyou.ru/calculators/complex-calculator ;
@@ -25,7 +41,7 @@ http://www.math24.ru/%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%BD%D1%8
     /**
      * Конструктор из строки вида x+yi
      */
-    constructor(s: String) : this(re = abc(s)[0], im = abc(s)[1])
+    //constructor(s: String) : this(re = abc(s)[0], im = abc(s)[1])
 
     /**
      * Сложение.
@@ -61,10 +77,6 @@ http://www.math24.ru/%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%BD%D1%8
      * Сравнение на равенство
      */
     override fun equals(other: Any?): Boolean {
-        if (other is String)
-            return abc(other)[0] == re && abc(other)[1] == im
-        if (other is Double)
-            return other == re && im == 0.0
         if (other is Complex)
             return other.re == re && other.im == im
         return false
@@ -74,12 +86,13 @@ http://www.math24.ru/%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%BD%D1%8
      * Преобразование в строку
      */
     override fun toString(): String {
-        return if(im > 0) "$re + $im"
-        else "$re - $im"
+        if(im > 0) return "$re+$im"
+        else if (im < 0) return "$re${im}"
+        return "$re"
     }
 }
 
-private fun abc(s: String): List<Double> {
+/*private fun abc(s: String): List<Double> {
     val ss = s.substring(0, s.length - 1)
     val list = ss.split(Regex("""\+|-"""))
     val symbol = ss.replace(Regex("""\d+"""), "")
@@ -93,4 +106,4 @@ private fun abc(s: String): List<Double> {
         imaginate = if (symbol == "-+") list[2].toDouble() else list[2].toDouble() * -1
     }
     return listOf(real, imaginate)
-}
+}*/
