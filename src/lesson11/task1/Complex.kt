@@ -86,8 +86,8 @@ http://www.math24.ru/%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%BD%D1%8
      * Преобразование в строку
      */
     override fun toString(): String {
-        if(im > 0) return "$re+$im"
-        else if (im < 0) return "$re${im}"
+        if(im > 0) return "$re+${im}i"
+        else if (im < 0) return "$re${im}i"
         return "$re"
     }
 }

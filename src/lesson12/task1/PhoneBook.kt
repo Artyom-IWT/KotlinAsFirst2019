@@ -19,9 +19,10 @@ import org.hamcrest.Condition
  *
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
+
 class PhoneBook {
 
-    private val book = mutableMapOf<String, MutableList<String>>()
+    private val book = mutableMapOf<String, MutableSet<String>>()
 
     /**
      * Добавить человека.
@@ -32,7 +33,7 @@ class PhoneBook {
 
     fun addHuman(name: String): Boolean {
         if (book.containsKey(name)) return false
-        book[name] = mutableListOf()
+        book[name] = mutableSetOf()
         return true
     }
 
@@ -86,7 +87,7 @@ class PhoneBook {
 
     fun phones(name: String): Set<String> {
         if (!book.containsKey(name)) return emptySet()
-        return book[name]!!.toSet()
+        return book[name]!!
     }
 
     /**
@@ -107,6 +108,10 @@ class PhoneBook {
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
 
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean = (other is PhoneBook && other.book == book && other.book.hashCode() == book.hashCode())
+
+    override fun hashCode(): Int {
+        return book.hashCode()
+    }
 
 }

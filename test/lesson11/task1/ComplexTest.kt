@@ -42,7 +42,7 @@ internal class ComplexTest {
         assertApproxEquals(Complex(1.0, 0.0), Complex(1.0), 1e-12)
     }
     @Test
-    fun toString() {
+    fun toStringTest() {
         assertEquals("11+2i", Complex(11.0, 2.0))
     }
 }
