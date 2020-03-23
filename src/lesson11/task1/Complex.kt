@@ -13,9 +13,9 @@ import lesson4.task1.abs
  *
  * Аргументы конструктора -- вещественная и мнимая часть числа.
  */
-fun complex(s: String) : Complex {
+fun Complex(s: String) : Complex {
     val ss = s.substring(0, s.length - 1)
-    val list = ss.split(Regex("""\+|-"""))
+    val list = ss.split(Regex("""[+\- ]"""))
     val symbol = ss.replace(Regex("""\d+"""), "")
     var real = 0.0
     var imaginate = 0.0
@@ -85,11 +85,16 @@ http://www.math24.ru/%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81%D0%BD%D1%8
     /**
      * Преобразование в строку
      */
-    override fun toString(): String {
-        if(im > 0) return "$re+${im}i"
-        else if (im < 0) return "$re${im}i"
-        return "$re"
-    }
+    override fun toString(): String =
+        when {
+           re == 0.0 -> "${im}i"
+           im == 0.0 -> "$re"
+           im == 1.0 -> "$re+i"
+           im == -1.0 -> "$re-i"
+           im > 0.0 -> "$re+${im}i"
+           im < 0.0 -> "$re${im}i"
+           else -> "0.0"
+       }
 }
 
 /*private fun abc(s: String): List<Double> {
