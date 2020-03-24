@@ -23,6 +23,7 @@ import org.hamcrest.Condition
 class PhoneBook {
 
     private val book = mutableMapOf<String, MutableSet<String>>()
+    private val phones = mutableMapOf<String, String>()
 
     /**
      * Добавить человека.
@@ -63,6 +64,7 @@ class PhoneBook {
         for ((n, p) in book)
             if (p.contains(phone)) return false
         book[name]!!.add(phone)
+        phones[phone] = name
         return true
     }
 
@@ -77,6 +79,7 @@ class PhoneBook {
         if (!book.containsKey(name)) return false
         if (!book[name]!!.contains(phone)) return false
         book[name]!!.remove(phone)
+        phones.remove(phone, name)
         return true
     }
 
@@ -95,12 +98,7 @@ class PhoneBook {
      * Если такого номера нет в книге, вернуть null.
      */
 
-    fun humanByPhone(phone: String): String? {
-        for ((n, p) in book) {
-            if (p.contains(phone)) return n
-        }
-        return null
-    }
+    fun humanByPhone(phone: String): String? = phones[phone]
 
     /**
      * Две телефонные книги равны, если в них хранится одинаковый набор людей,

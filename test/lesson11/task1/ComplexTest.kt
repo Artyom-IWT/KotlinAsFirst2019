@@ -44,5 +44,8 @@ internal class ComplexTest {
     @Test
     fun toStringTest() {
         assertEquals("11.0+2.0i", Complex(11.0, 2.0).toString())
+        assertEquals("2.0+i", Complex(2.0, 1.0).toString())
+        assertEquals("3.0i", Complex(0.0, 3.0).toString())
+        assertEquals("0.0", Complex(0.0, 0.0).toString())
     }
 }
